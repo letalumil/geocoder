@@ -2,12 +2,15 @@ var request = require("request");
 var _ = require('underscore');
 
 exports.geocode = function ( providerOpts, loc, cbk, opts ) {
-
-  var options = _.extend({sensor: false, address: loc}, opts || {});
+  opts = opts || {};
+  var proxy = opts.proxy;
+  delete opts.proxy;
+  var options = _.extend({sensor: false, address: loc}, opts);
   var uri = "http" + ( options.key ? "s" : "" ) + "://maps.googleapis.com/maps/api/geocode/json"
   request({
     uri: uri,
-    qs:options
+    qs:options,
+    proxy:proxy
   }, function(err,resp,body) {
     if (err) return cbk(err);
     var result;
@@ -22,13 +25,16 @@ exports.geocode = function ( providerOpts, loc, cbk, opts ) {
 };
 
 exports.reverseGeocode = function ( providerOpts, lat, lng, cbk, opts ) {
-
+  opts = opts || {};
+  var proxy = opts.proxy;
+  delete opts.proxy;
   var options = _.extend({sensor: false, latlng: lat + ',' + lng}, opts || {});
   var uri = "http" + ( options.key ? "s" : "" ) + "://maps.googleapis.com/maps/api/geocode/json"
 
   request({
     uri:uri,
-    qs:options
+    qs:options,
+    proxy:proxy
   }, function(err,resp,body) {
     if (err) return cbk(err);
     var result;

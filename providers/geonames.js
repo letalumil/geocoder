@@ -5,12 +5,15 @@ var request = require("request");
 var _ = require('underscore');
 
 exports.geocode = function ( providerOpts, loc, cbk, opts ) {
-
+  opts = opts || {};
+  var proxy = opts.proxy;
+  delete opts.proxy;
   var options = _.extend({q: loc, maxRows: 10, username:providerOpts.username||"demo" }, opts || {});
 
   request({
     uri:"http://api.geonames.org/searchJSON",
-    qs:options
+    qs:options,
+    proxy:proxy
   }, function(err,resp,body) {
     if (err) return cbk(err);
     var result;
@@ -25,12 +28,15 @@ exports.geocode = function ( providerOpts, loc, cbk, opts ) {
 };
 
 exports.reverseGeocode = function ( providerOpts, lat, lng, cbk, opts ) {
-
+  opts = opts || {};
+  var proxy = opts.proxy;
+  delete opts.proxy;
   var options = _.extend({lat:lat, lng:lng, username:providerOpts.username||"demo" }, opts || {});
 
   request({
     uri:"http://api.geonames.org/extendedFindNearby",
-    qs:options
+    qs:options,
+    proxy:proxy
   }, function(err,resp,body) {
     if (err) return cbk(err);
 

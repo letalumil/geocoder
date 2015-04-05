@@ -4,12 +4,15 @@ var request = require("request");
 var _ = require('underscore');
 
 exports.geocode = function ( providerOpts, loc, cbk, opts ) {
-
+  opts = opts || {};
+  var proxy = opts.proxy;
+  delete opts.proxy;
   var options = _.extend({q: loc, flags: "J", appid:providerOpts.appid||"[yourappidhere]" }, opts || {});
 
   request({
     uri:"http://where.yahooapis.com/geocode",
-    qs:options
+    qs:options,
+    proxy:proxy
   }, function(err,resp,body) {
     if (err) return cbk(err);
     var result;
@@ -25,12 +28,15 @@ exports.geocode = function ( providerOpts, loc, cbk, opts ) {
 
 // yahoo placefinder api http://developer.yahoo.com/geo/placefinder/guide/
 exports.reverseGeocode = function ( providerOpts, lat, lng, cbk, opts ) {
-
+  opts = opts || {};
+  var proxy = opts.proxy;
+  delete opts.proxy;
   var options = _.extend({q: lat+", "+lng, gflags:"R", flags: "J", appid:providerOpts.appid||"[yourappidhere]" }, opts || {});
 
   request({
     uri:"http://where.yahooapis.com/geocode",
-    qs:options
+    qs:options,
+    proxy:proxy
   }, function(err,resp,body) {
 
     // console.log("[GEOCODER Yahoo API] uri:", "http://where.yahooapis.com/geocode");
